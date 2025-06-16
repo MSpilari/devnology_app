@@ -27,6 +27,21 @@ export class ProductsService {
     };
   }
 
+  async findById(provider: string, id: string) {
+    const cachedProducts = await this.cacheManager.get<Products[]>(
+      this.cacheKey,
+    );
+
+    if (cachedProducts) {
+      const found = cachedProducts.find(
+        (product) => product.id === `${provider}/${id}`,
+      );
+      if (found) return found;
+    }
+
+    return await this.externalProductsService.fetchSingleProduct(provider, id);
+  }
+
   private async getFromCacheOrApi(): Promise<Products[]> {
     const cachedProducts = await this.cacheManager.get<Products[]>(
       this.cacheKey,
@@ -36,7 +51,7 @@ export class ProductsService {
 
     const allProducts = await this.externalProductsService.fetchProducts();
 
-    await this.cacheManager.set(this.cacheKey, allProducts, 300);
+    await this.cacheManager.set(this.cacheKey, allProducts);
 
     return allProducts;
   }
