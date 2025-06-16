@@ -9,6 +9,8 @@ export class ExternalProductsService {
     'http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/brazilian_provider';
   private readonly europeanProviderUrl =
     'http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/european_provider';
+  private readonly commonUrl =
+    'http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/';
 
   constructor(private readonly httpService: HttpService) {}
 
@@ -42,5 +44,35 @@ export class ExternalProductsService {
     }));
 
     return [...produtosBr, ...produtosEu];
+  }
+
+  async fetchSingleProduct(provider: string, id: string) {
+    const response: AxiosResponse<brResponse | euResponse> =
+      await firstValueFrom(
+        this.httpService.get(`${this.commonUrl + provider}/${id}`),
+      );
+    const data = response.data;
+
+    if ('nome' in data) {
+      return {
+        id: `${provider}/${data.id}`,
+        nome: data.nome,
+        descricao: data.descricao,
+        categoria: data.categoria,
+        preco: data.preco,
+        imagem: data.imagem,
+      };
+    } else {
+      return {
+        id: `${provider}/${data.id}`,
+        nome: data.name,
+        descricao: data.description,
+        categoria: 'General',
+        preco: data.hasDiscount
+          ? Number(data.price) * (1 - Number(data.discountValue))
+          : Number(data.price),
+        imagem: Array.isArray(data.gallery) ? data.gallery : [data.gallery],
+      };
+    }
   }
 }
