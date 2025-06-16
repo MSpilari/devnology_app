@@ -5,7 +5,10 @@ import { ProductsModule } from './products/products.module';
 import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
-  imports: [ProductsModule, CacheModule.register({ isGlobal: true, ttl: 300 })],
+  imports: [
+    ProductsModule,
+    CacheModule.register({ isGlobal: true, ttl: 300000 }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
