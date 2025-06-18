@@ -5,6 +5,7 @@ import { ProductsModule } from './products/products.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrdersModule } from './orders/orders.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -16,6 +17,10 @@ import { OrdersModule } from './orders/orders.module';
       database: __dirname + '/database/db.sqlite',
       entities: [__dirname + '/**/*.entity.{ts,js}'],
       synchronize: true,
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
     }),
   ],
   controllers: [AppController],
