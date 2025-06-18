@@ -249,8 +249,6 @@ A aplicação estará disponível em: [http://localhost:3000](http://localhost:3
 - Facilidade para **testes unitários** isolados;
 - Melhor escalabilidade à medida que novas regras de negócio ou integrações sejam adicionadas.
 
-Perfeito! Aqui está uma versão ampliada e aprimorada da sua seção **"Persistência de dados"**, incorporando os pontos que você mencionou de forma clara e técnica:
-
 ---
 
 ### 5. **Persistência de dados**
