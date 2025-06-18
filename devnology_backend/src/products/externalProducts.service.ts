@@ -10,12 +10,9 @@ import { AxiosResponse } from 'axios';
 
 @Injectable()
 export class ExternalProductsService {
-  private readonly brazilianProviderUrl =
-    'http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/brazilian_provider';
-  private readonly europeanProviderUrl =
-    'http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/european_provider';
-  private readonly commonUrl =
-    'http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/';
+  private readonly brazilianProviderUrl = process.env.BRAZILIAN_PROVIDER_URL;
+  private readonly europeanProviderUrl = process.env.EUROPEAN_PROVIDER_URL;
+  private readonly commonUrl = process.env.COMMON_URL;
 
   constructor(private readonly httpService: HttpService) {}
 
@@ -25,8 +22,8 @@ export class ExternalProductsService {
         AxiosResponse<brResponse[]>,
         AxiosResponse<euResponse[]>,
       ] = await Promise.all([
-        firstValueFrom(this.httpService.get(this.brazilianProviderUrl)),
-        firstValueFrom(this.httpService.get(this.europeanProviderUrl)),
+        firstValueFrom(this.httpService.get(this.brazilianProviderUrl!)),
+        firstValueFrom(this.httpService.get(this.europeanProviderUrl!)),
       ]);
 
       const produtosBr = brResponse.data.map((item) => ({
