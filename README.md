@@ -203,3 +203,109 @@ A aplicação estará disponível em: [http://localhost:3000](http://localhost:3
 - Finalização do pedido após inserção do nome do cliente
 - Persistência dos pedidos em banco SQLite
 - Tabela de pedidos finalizados
+
+---
+
+## 🧠 Decisões Técnicas
+
+### 1. **Stack principal**
+
+- **Frontend:** Utilizei **Next.js**, que oferece Server-Side Rendering (SSR) utilizado nas páginas Home, orders e products, isso melhora SEO(Otimização para mecanismos de busca) e performance na primeira renderização. Além do roteamento automático e boa integração com React.
+- **Backend:** Optei por **NestJS**, pois vocês ressaltaram a preferência por este framework.
+
+### 2. **Integração com múltiplos fornecedores**
+
+- O sistema consome dados de **duas APIs externas** (brasileira e europeia). O backend trata essa integração e **unifica o formato dos dados** para que o frontend possa consumir de forma consistente, como se fosse uma única API.
+
+### 3. **Cache nas requisições a APIs externas**
+
+- Para **minimizar a dependência das APIs de terceiros** e melhorar a performance da aplicação, implementei **caching com o módulo de cache do NestJS**.
+- Adotei o padrão **Cache-Aside**, no qual:
+
+  - Primeiro, o backend **verifica se os dados estão no cache**.
+  - Caso estejam, **retorna diretamente**, reduzindo a latência.
+  - Caso não estejam, **faz a requisição à API externa**, armazena o resultado no cache e retorna os dados.
+
+- Isso traz ganhos importantes:
+
+  - ✅ Melhora o desempenho em requisições repetidas;
+  - ✅ Reduz chamadas desnecessárias às APIs externas;
+  - ✅ Garante maior resiliência em caso de instabilidade dos fornecedores.
+
+---
+
+### 4. **Arquitetura em camadas no backend (NestJS)**
+
+- O backend foi estruturado utilizando a **Arquitetura em Camadas (Layered Architecture)**, separando de forma clara as responsabilidades da aplicação:
+
+  - **Controllers:** Responsáveis por receber as requisições HTTP e direcioná-las corretamente;
+  - **Services:** Contêm a lógica de negócio, como integração com as APIs de terceiros e persistência de pedidos via Repository do TypeORM;
+  - **DTOs:** Validação e tipagem dos dados recebidos nas requisições;
+  - **Entities:** Representam os modelos utilizados no banco de dados SQLite.
+
+✅ Essa separação garante:
+
+- Maior **organização e manutenibilidade**;
+- Facilidade para **testes unitários** isolados;
+- Melhor escalabilidade à medida que novas regras de negócio ou integrações sejam adicionadas.
+
+Perfeito! Aqui está uma versão ampliada e aprimorada da sua seção **"Persistência de dados"**, incorporando os pontos que você mencionou de forma clara e técnica:
+
+---
+
+### 5. **Persistência de dados**
+
+- Os **pedidos realizados** são persistidos utilizando **SQLite**.
+- Optei por um banco de dados **relacional (SQL)** em vez de uma solução NoSQL por razões de:
+
+  - **Estabilidade e maturidade** dos bancos SQL;
+  - **Consistência forte** nos dados, o que é fundamental em sistemas que lidam com **transações financeiras** e **pedidos estruturados**.
+
+- Utilizei **TypeORM**, que permite uma integração fluida com o banco via **ORM (Object-Relational Mapping)** e com o **NestJS**, facilitando a modelagem de entidades, validações.
+- Além disso, o uso de **validações e constraints** ajuda a garantir que regras importantes sejam respeitadas, como:
+
+  - O campo `total` do pedido **não aceitar valores negativos**;
+  - A integridade entre pedidos e os produtos vinculados.
+
+✅ Essa abordagem garante:
+
+- **Segurança e confiabilidade** na manipulação de dados sensíveis;
+- Facilidade na **evolução do modelo de dados**;
+- Melhor controle sobre as **regras de negócio críticas** do sistema.
+
+---
+
+### 6. **Arquitetura do frontend**
+
+- Adotei uma **arquitetura baseada em domínio**, onde o código é organizado por funcionalidades e responsabilidades:
+
+  - `app/` contém as rotas e estrutura principal da aplicação (páginas como `/`, `/cart`, etc.).
+  - `components/` agrupa componentes reutilizáveis, organizados por contexto, como `productClientSection`, `cartSummary`, `ordersTable`, etc.
+  - `context/` e `hooks/` abrigam a lógica de estado e reuso, como `useCart`, de forma isolada da UI.
+  - `types/` centraliza os tipos TypeScript utilizados no projeto, melhorando consistência e tipagem.
+
+- Essa estrutura:
+
+  - Favorece a **escalabilidade e manutenção**, pois separa claramente UI, lógica de estado e tipos.
+  - Permite **alta reutilização de componentes** entre páginas.
+  - Está alinhada com os princípios de **componentização do React** e boas práticas modernas em projetos com **Next.js**.
+
+---
+
+### 7. **Utilizando Context no Componente Cart**
+
+O uso do **React Context** no componente **Cart** é uma decisão técnica que visa **gerenciar o estado global do carrinho de forma eficiente e escalável**, atendendo aos seguintes pontos:
+
+1. **Compartilhamento de estado entre múltiplos componentes**
+   O carrinho geralmente é acessado e manipulado por vários componentes na aplicação — como lista de produtos, cabeçalho (ícone do carrinho), página de checkout, etc. O Context permite que esses componentes **acessam e atualizem o estado do carrinho diretamente, sem a necessidade de passar props manualmente por múltiplos níveis** da árvore de componentes.
+
+2. **Evitar "prop drilling"**
+   Sem Context, seria necessário passar informações do carrinho como props por muitos níveis intermediários que não utilizam esse dado, o que torna o código mais verboso, menos manutenível e sujeito a erros.
+
+3. **Melhor performance e organização**
+   O Context permite centralizar a lógica de estado e métodos para manipular o carrinho (como adicionar, remover produtos, limpar o carrinho). Isso torna o código mais organizado, facilita testes e melhora a performance, pois o React gerencia melhor a atualização apenas dos componentes que consomem o Context.
+
+4. **Escalabilidade**
+   À medida que a aplicação cresce, o estado do carrinho pode ficar mais complexo (itens, quantidades, preços, descontos, etc.). O Context oferece uma estrutura robusta para manter esse estado global sincronizado e consistente em toda a aplicação.
+
+---
