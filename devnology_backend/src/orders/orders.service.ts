@@ -15,7 +15,7 @@ export class OrdersService {
     @InjectRepository(Order) private readonly orderRepo: Repository<Order>,
   ) {}
 
-  createOrder(dto: CreateOrderDto): Promise<Order> {
+  async createOrder(dto: CreateOrderDto): Promise<Order> {
     try {
       const total = dto.products
         .map((product) => product.preco * product.quantidade)
@@ -30,16 +30,17 @@ export class OrdersService {
         products: dto.products,
         total,
       });
-      return this.orderRepo.save(newOrder);
+      return await this.orderRepo.save(newOrder);
     } catch (error) {
+      if (error instanceof BadRequestException) throw error;
       Logger.error('Failed to create order', error.stack || error.message);
       throw new InternalServerErrorException('Could not create the order');
     }
   }
 
-  findAll(): Promise<Order[]> {
+  async findAll(): Promise<Order[]> {
     try {
-      return this.orderRepo.find();
+      return await this.orderRepo.find();
     } catch (error) {
       Logger.error('Failed to retrieve orders', error.stack || error.message);
       throw new InternalServerErrorException('Could not fetch orders');
