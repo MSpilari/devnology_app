@@ -95,4 +95,82 @@ describe('ExternalProductsService', () => {
       );
     });
   });
+
+  describe('fetchSingleProduct', () => {
+    it('should return a brazilian product formatted', async () => {
+      const brProduct = {
+        id: '1',
+        nome: 'Produto BR',
+        descricao: 'Desc',
+        categoria: 'Categoria',
+        preco: 100,
+        imagem: 'img.jpg',
+      };
+
+      (httpService.get as jest.Mock).mockReturnValueOnce(
+        of({ data: brProduct } as AxiosResponse),
+      );
+
+      const result = await service.fetchSingleProduct(
+        'brazilian_provider',
+        '1',
+      );
+
+      expect(result).toEqual({
+        id: 'brazilian_provider/1',
+        nome: 'Produto BR',
+        descricao: 'Desc',
+        categoria: 'Categoria',
+        preco: 100,
+        imagem: 'img.jpg',
+      });
+    });
+
+    it('should return a european product formatted', async () => {
+      const euProduct = {
+        id: '2',
+        name: 'Produto EU',
+        description: 'Desc',
+        price: 200,
+        hasDiscount: true,
+        discountValue: 0.25,
+        gallery: ['img-eu.jpg'],
+      };
+
+      (httpService.get as jest.Mock).mockReturnValueOnce(
+        of({ data: euProduct } as AxiosResponse),
+      );
+
+      const result = await service.fetchSingleProduct('european_provider', '2');
+
+      expect(result).toEqual({
+        id: 'european_provider/2',
+        nome: 'Produto EU',
+        descricao: 'Desc',
+        categoria: 'General',
+        preco: 150,
+        imagem: ['img-eu.jpg'],
+      });
+    });
+
+    it('should throw NotFoundException if a product is not found', async () => {
+      (httpService.get as jest.Mock).mockReturnValueOnce(
+        of({ data: {} } as AxiosResponse),
+      );
+
+      await expect(
+        service.fetchSingleProduct('brazilian_provider', '123'),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw a ServiceUnavailableException on a requisition error', async () => {
+      (httpService.get as jest.Mock).mockReturnValueOnce(
+        throwError(() => new Error('Erro')),
+      );
+
+      await expect(
+        service.fetchSingleProduct('european_provider', '456'),
+      ).rejects.toThrow(ServiceUnavailableException);
+    });
+  });
 });
