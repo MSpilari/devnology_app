@@ -5,8 +5,8 @@ import {
   NotFoundException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { firstValueFrom } from 'rxjs';
 import { AxiosResponse } from 'axios';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class ExternalProductsService {
@@ -89,6 +89,8 @@ export class ExternalProductsService {
         };
       }
     } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+
       Logger.error(
         `Failed to fetch product ${provider}/${id}:`,
         error.message || error,
