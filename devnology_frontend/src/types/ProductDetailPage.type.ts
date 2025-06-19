@@ -1,6 +1,6 @@
 type ProductDetailPage = {
-  params: {
+  params: Promise<{
     provider: string;
     id: string;
-  };
+  }>;
 };
