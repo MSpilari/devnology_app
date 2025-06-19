@@ -13,7 +13,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: [process.env.FRONT_END_URL],
+    origin: process.env.FRONT_END_URL?.split(','),
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   });
 
