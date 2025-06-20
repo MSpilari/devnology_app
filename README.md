@@ -6,16 +6,16 @@ Este projeto é uma solução completa de e-commerce desenvolvida para o desafio
 
 ## 📚 Índice
 
-- [📁 Estrutura do Projeto](##-estrutura-do-projeto)
-- [🚀 Tecnologias Utilizadas](##-tecnologias-utilizadas)
-- [🐳 Como rodar o projeto com Docker](##-como-rodar-o-projeto-com-docker)
-- [🖥️ Como rodar o projeto localmente](##-como-rodar-o-projeto-localmente)
-- [🔙 Backend (NestJS)](##-backend-nestjs)
-  - [📡 Rotas disponíveis (API NestJS)](###-rotas-disponíveis-api-nestjs)
-- [🌐 Web (Next.js)](##-web-nextjs)
-  - [🌐 Rotas da aplicação web (Next.js)](###-rotas-da-aplicação-web-nextjs)
-- [✅ Funcionalidades](##-funcionalidades)
-- [🧠 Decisões Técnicas](##-decisões-técnicas)
+- [📁 Estrutura do Projeto](#estrutura-do-projeto)
+- [🚀 Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [🐳 Como rodar o projeto com Docker](#como-rodar-o-projeto-com-docker)
+- [🖥️ Como rodar o projeto localmente](#como-rodar-o-projeto-localmente)
+- [🔙 Backend (NestJS)](#backend-nestjs)
+  - [📡 Rotas disponíveis (API NestJS)](#rotas-disponiveis-api-nestjs)
+- [🌐 Web (Next.js)](#web-nextjs)
+  - [🌐 Rotas da aplicação web (Next.js)](#rotas-da-aplicacao-web-nextjs)
+- [✅ Funcionalidades](#funcionalidades)
+- [🧠 Decisões Técnicas](#decisoes-tecnicas)
 
 ---
 
