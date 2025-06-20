@@ -4,6 +4,21 @@ Este projeto é uma solução completa de e-commerce desenvolvida para o desafio
 
 ---
 
+## 📚 Índice
+
+- [📁 Estrutura do Projeto](##-estrutura-do-projeto)
+- [🚀 Tecnologias Utilizadas](##-tecnologias-utilizadas)
+- [🐳 Como rodar o projeto com Docker](##-como-rodar-o-projeto-com-docker)
+- [🖥️ Como rodar o projeto localmente](##-como-rodar-o-projeto-localmente)
+- [🔙 Backend (NestJS)](##-backend-nestjs)
+  - [📡 Rotas disponíveis (API NestJS)](###-rotas-disponíveis-api-nestjs)
+- [🌐 Web (Next.js)](##-web-nextjs)
+  - [🌐 Rotas da aplicação web (Next.js)](###-rotas-da-aplicação-web-nextjs)
+- [✅ Funcionalidades](##-funcionalidades)
+- [🧠 Decisões Técnicas](##-decisões-técnicas)
+
+---
+
 ## 📁 Estrutura do Projeto
 
 ```
@@ -23,6 +38,49 @@ devnology-ecommerce/
 - **Estilização**: Tailwind CSS
 - **Persistência de pedidos**: SQLite
 - **APIs externas**: Brazilian & European Provider (via MockAPI)
+
+---
+
+## 🐳 Como rodar o projeto com Docker
+
+### ✅ Pré-requisitos
+
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+### 📦 Passos
+
+1. Clone o repositório
+
+```bash
+git clone https://github.com/MSpilari/devnology_app
+cd devnology_app
+```
+
+2. Execute o Docker Compose
+
+```bash
+docker-compose up -d --build
+```
+
+Esse comando irá:
+
+- Buildar as imagens do backend e frontend
+- Instalar dependências
+- Iniciar os serviços simultaneamente
+
+### 🌐 Acesso
+
+- Frontend: [http://localhost:3001](http://localhost:3001)
+- Backend/API: [http://localhost:3000](http://localhost:3000)
+
+### 🔄 Derrubar os containers
+
+```bash
+docker-compose down
+```
+
+> ✅ Os containers estão configurados com `force-dynamic` no Next.js para garantir SSR sempre que necessário.
 
 ---
 
@@ -68,7 +126,7 @@ Crie um arquivo `.env` na raiz do backend, pode seguir o exemplo do `.env.exampl
 BRAZILIAN_PROVIDER_URL=http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/brazilian_provider
 EUROPEAN_PROVIDER_URL=http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/european_provider
 COMMON_URL=http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/
-FRONT_END_URL= Insira aqui a url do seu front end
+FRONT_END_URL=http://localhost:3001
 PORT=Porta que deseja configurar
 ```
 
@@ -171,8 +229,8 @@ yarn install
 Crie um arquivo `.env`, seguindo o exemplo do `.env.example`, na raiz com:
 
 ```env
-API_URL=Insira a URL da sua Api Nest
-NEXT_PUBLIC_API_URL=Insira a URL da sua Api Nest
+API_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
 ### 4. Inicie o frontend
