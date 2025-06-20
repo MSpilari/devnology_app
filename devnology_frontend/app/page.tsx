@@ -1,6 +1,8 @@
 import ProductClientSection from "@/src/components/productClientSection/ProductClientSection";
 import { Product } from "@/src/types/Product.type";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const res = await fetch(`${process.env.API_URL}/products`);
   const productsJSON = await res.json();

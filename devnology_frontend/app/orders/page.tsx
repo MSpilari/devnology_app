@@ -1,5 +1,7 @@
 import { OrdersTable } from "@/src/components/ordersTable/ordersTable";
 
+export const dynamic = "force-dynamic";
+
 export default async function OrderPage() {
   const res = await fetch(`${process.env.API_URL}/orders`);
   const data = await res.json();
