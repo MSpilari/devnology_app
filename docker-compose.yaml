@@ -1,0 +1,34 @@
+services:
+  devnology_backend:
+    build:
+      context: ./devnology_backend
+    ports:
+      - "3000:3000"
+    environment:
+      BRAZILIAN_PROVIDER_URL: http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/brazilian_provider
+      EUROPEAN_PROVIDER_URL: http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/european_provider
+      COMMON_URL: http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/
+      FRONT_END_URL: http://devnology_frontend:3000,http://localhost:3001,http://localhost:3000
+    networks:
+      - devnology_net
+    restart: unless-stopped
+  
+  devnology_frontend:
+    build:
+      context: ./devnology_frontend
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:3000
+        API_URL: http://devnology_backend:3000
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+      API_URL: http://devnology_backend:3000
+    ports:
+      - "3001:3000"
+    depends_on:
+        - devnology_backend
+    networks:
+    - devnology_net
+    restart: unless-stopped
+
+networks:
+  devnology_net:
